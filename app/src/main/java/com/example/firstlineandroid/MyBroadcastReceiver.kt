@@ -9,6 +9,5 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Toast.makeText(context, "received in MyBroadcastReceiver", Toast.LENGTH_LONG).show()
-
     }
 }

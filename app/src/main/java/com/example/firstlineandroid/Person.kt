@@ -1,15 +1,17 @@
 package com.example.firstlineandroid
 
+import android.util.Log
+
 open class Person(val name: String, val age: Int) {
     open fun eat() {
         println(name + "is eating. He is " + age + "years old.")
     }
 }
 
-class Student(val sno: String, val grade: Int, name: String, age: Int) : Person(name, age), Study {
+open class Student(val sno: String, val grade: Int, name: String, age: Int) : Person(name, age), Study {
     init {
-        println("sno is$sno")
-        println("grade is $grade")
+        Log.d("sno","sno is$sno")
+        Log.d("grade","grade is $grade")
 
     }
 
@@ -27,11 +29,11 @@ class Student(val sno: String, val grade: Int, name: String, age: Int) : Person(
     }
 
     override fun readBooks() {
-
+        Log.d("read","$name is reading")
     }
 
     override fun doHomework() {
-
+        Log.d("doHomework","$name is doing homework")
     }
 
 }

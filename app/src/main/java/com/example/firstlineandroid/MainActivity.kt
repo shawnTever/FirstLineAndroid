@@ -8,106 +8,66 @@ import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var timeChangeReceiver: TimeChangeReceiver
+    lateinit var br: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d("MainActivity", "OnCreate execute")
-        Log.i("data", "OnCreate execute")
 
-        val p = Person("Jack", 19)
-        p.eat()
+        /*
+            显式intent
+         */
 
-/*
-*       list set and map
-* */
+//        val intent = Intent(this, FirstLine::class.java)
+//        startActivity(intent)
 
-        val list = mutableListOf("apple", "Banana")
-        list.add(" ")
+        /*
+            隐式intent
+         */
 
-        for (fruit in list) {
-            Log.d("list set and map", "each fruit in the list: $fruit")
-        }
+//        val intent = Intent("com.example.activitytest.ACTION_START")
+//        startActivity(intent)
 
-        val set = mutableSetOf("apple", "Banana")
-        list.add(" ")
 
-        for (fruit in set) {
-            Log.d("list set and map", "each fruit in the set: $fruit")
-        }
-
-        val map = HashMap<String, Int>()
-        map["apple"] = 1
-
-        val map1 = mapOf("Apple" to 1, "Banana" to 2)
-        val map2 = mutableMapOf("Apple" to 1, "Banana" to 2)
-
-        for ((fruit, number) in map) {
-            Log.d("list set and map", "each fruit in the map: $fruit, value: $number")
-        }
-/*
-*       单例模式
-* */
-        Singleton.singletonTest()
-
-/*
-*       集合函数式API
-*       lambda: any判断是否有元素满足指定条件
-*               all判断是否所有元素满足指定条件
-* */
-        val maxLength = list.maxBy { it.length }
-
-        val lambda = {fruit: String -> fruit.length}
-        val maxLengthFruit1 = list.maxBy(lambda)
-
-        val maxLengthFruit2 = list.maxBy{ fruit -> fruit.length }
-        val maxLengthFruit3 = list.maxByOrNull { it.length }
-
-        val newList1 = list.map { it.toUpperCase() }
-        val newList2 = list.filter { it.length <= 5 }
-                .map { it.toUpperCase() }
-
-        val anyResult = list.any { it.length <= 5 }
-        val allResult = list.all { it.length <= 5 }
-
-/*
-*       结合线程的Runnable接口
-* */
-        Thread(object :Runnable {
-            override fun run() {
-                Log.d("runnable", "Thread is running")
-            }
-        }).start()
-
-        Thread { Log.d("runnable", "Thread is running") }.start()
-
-/*
-*       结合线程的Runnable接口
-* */
-
+        /*
+            动态监测广播
+         */
 
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
             addAction(Intent.ACTION_MANAGE_NETWORK_USAGE)
         }
+        br = MyBroadcastReceiver()
+        registerReceiver(br, filter)
 
         val intentFilter = IntentFilter()
-        intentFilter.addAction("Android.intent.action.TIME_TICK")
+        intentFilter.addAction(Intent.ACTION_TIME_TICK)
         timeChangeReceiver = TimeChangeReceiver()
         registerReceiver(timeChangeReceiver, intentFilter)
 
-        val br: BroadcastReceiver = MyBroadcastReceiver()
-        registerReceiver(br, filter)
+
+        /*
+            发送广播
+         */
+
+        SendBroadcast.setOnClickListener {
+            val intent = Intent("com.example.firstlineandroid.My_BROADCAST")
+            intent.setPackage(packageName)
+            sendBroadcast(intent)
+        }
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(timeChangeReceiver)
+        unregisterReceiver(br)
     }
 
     inner class TimeChangeReceiver : BroadcastReceiver() {
@@ -116,4 +76,5 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 }

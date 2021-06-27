@@ -11,10 +11,14 @@
         android:roundIcon="@drawable/ic_launcher_background"
         android:supportsRtl="true"
         android:theme="@style/Theme.FirstLineAndroid">
+        <activity android:name=".explicitIntent"></activity>
+        <activity android:name=".firstLayout" />
+        <activity android:name=".FirstLine" />
+
         <receiver
             android:name=".TimeChangeReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
         <receiver
             android:name=".MyBroadcastReceiver"
             android:enabled="true"
@@ -32,7 +36,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:label="this is the mainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
